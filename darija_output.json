@@ -1,0 +1,108 @@
+{
+  "_notice": "SORTIE SYNTHÉTIQUE — phrase d'exemple fabriquée pour la démonstration, aucun pèlerin réel.",
+  "input": {
+    "raw_text": "راني حسيت بتعب كبير اليوم فالرجلين",
+    "modality": "VOICE_DARIJA",
+    "language": "ary-MA",
+    "asr_confidence": 0.93,
+    "synthetic": true
+  },
+  "normalization": {
+    "arabic": "أنا أحسست بتعب كبير اليوم في الرجلين",
+    "french": "J'ai ressenti une forte fatigue aujourd'hui dans les jambes."
+  },
+  "indicators": {
+    "intent": "DECLARER_ETAT",
+    "state": { "value": "FATIGUED", "confidence": 0.86 },
+    "rpe": {
+      "value": 7,
+      "scale": "0-10",
+      "band": "ELEVE",
+      "confidence": 0.72,
+      "source_span": [11, 18],
+      "confirmed_by_user": false
+    },
+    "nrs": {
+      "value": null,
+      "confidence": null,
+      "reason": "تعب = fatigue ; aucun lexème de douleur (ألم / وجع) détecté"
+    },
+    "body_site": [
+      {
+        "value": "LEGS",
+        "label_darija": "الرجلين",
+        "label_fr": "jambes",
+        "confidence": 0.88,
+        "source_span": [26, 33]
+      }
+    ],
+    "temporal": { "value": "TODAY", "source_span": [20, 24] },
+    "red_flags": []
+  },
+  "provenance": [
+    { "span": [0, 8], "text": "راني حسيت", "maps_to": "intent" },
+    { "span": [11, 18], "text": "تعب كبير", "maps_to": "rpe" },
+    { "span": [20, 24], "text": "اليوم", "maps_to": "temporal" },
+    { "span": [26, 33], "text": "فالرجلين", "maps_to": "body_site" }
+  ],
+  "ambiguities": [
+    "« تعب كبير » est un ressenti subjectif : la valeur 7 est une estimation, pas une mesure.",
+    "La fatigue des jambes peut être musculaire ou articulaire ; le type n'est pas spécifié."
+  ],
+  "follow_up_questions": [
+    {
+      "darija": "واش كاين ألم ولا وجع فالرجلين؟",
+      "fr": "Y a-t-il une douleur dans les jambes ?",
+      "maps_to": "nrs"
+    },
+    {
+      "darija": "واش حسّيتي بضغط فالصدر ولا دوخة؟",
+      "fr": "Avez-vous eu une douleur thoracique ou un vertige ?",
+      "maps_to": "red_flags"
+    }
+  ],
+  "decision_before_confirmation": {
+    "rule_id": "CONFIRM",
+    "rule_version": "1.0.0",
+    "action": "DEMANDER_CONFIRMATION",
+    "severity": "INFO",
+    "needs_human_validation": true,
+    "explanation_fr": "Déclaration vocale non confirmée (confiance 0.72) : confirmation requise avant tout changement de charge.",
+    "explanation_ar": "تصريح صوتي غير مؤكد (الثقة 0.72): يلزم التأكيد قبل أي تغيير في الحمل."
+  },
+  "decision_after_confirmation": {
+    "condition": "utilisateur appuie sur « تأكيد » ET confiance 0.72 >= seuil 0.65",
+    "branches": [
+      {
+        "si": "séance précédente RPE >= 7",
+        "rule_id": "R3",
+        "action": "PROPOSER_ALLEGEMENT",
+        "payload": { "pourcentage": 15, "duree_reference_min": 20, "duree_proposee_min": 17 },
+        "validation": "encadrant"
+      },
+      {
+        "si": "séance précédente RPE < 7",
+        "rule_id": null,
+        "action": "AUCUNE_ACTION",
+        "payload": {},
+        "validation": "aucune ; question de clarification douleur conservée"
+      }
+    ]
+  },
+  "if_pain_confirmed": {
+    "reponse_darija": "أه، كاين ألم بزاف",
+    "nrs": 7,
+    "rule_id": "R4",
+    "action": "ALERTER_KINE_MEDECIN",
+    "sla_minutes": 5
+  },
+  "red_flag_example": {
+    "raw_text": "حسيت بضغط فالصدر و دوخة",
+    "french": "J'ai ressenti une oppression thoracique et un vertige.",
+    "red_flags": ["chest_pain", "vertigo"],
+    "rule_id": "S0",
+    "action": "SUSPENDRE_IMMEDIATEMENT",
+    "severity": "CRITICAL",
+    "requires_confirmation": false
+  }
+}

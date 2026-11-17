@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "meta": {
+    "project": "Jahiz / جاهز",
+    "spec": "MVP 1.0 — Hajj 1448",
+    "note": "Données synthétiques uniquement. Le moteur propose et alerte ; il ne diagnostique pas et ne prescrit pas."
+  },
+  "engine": {
+    "version": "1.0.0",
+    "timezone": "Africa/Casablanca",
+    "evaluation_order": ["S0", "R4", "R5", "R3", "R1", "R2", "CONFIRM", "R6"],
+    "conflict_policy": "PREMIERE_REGLE_TERMINANTE_PAR_PRIORITE",
+    "voice_source_code": "VOICE_DARIJA",
+    "min_voice_confidence_for_load_change": 0.65
+  },
+  "thresholds": {
+    "rpe_low_max": 4,
+    "rpe_mid_min": 5,
+    "rpe_mid_max": 6,
+    "rpe_high_min": 7,
+    "nrs_alert_min": 4,
+    "consecutive_sessions": 2,
+    "progression_pct": 10,
+    "regression_pct": 15,
+    "inactivity_reminder_days": 2,
+    "inactivity_call_days": 3,
+    "pain_alert_sla_minutes": 5
+  },
+  "red_flags": [
+    "chest_pain",
+    "vertigo",
+    "unusual_dyspnea",
+    "acute_joint_pain"
+  ],
+  "rules": {
+    "S0": {
+      "label": "Garde-fou — critères de stop immédiat",
+      "priority": 0,
+      "enabled": true,
+      "terminates": true,
+      "human_validation": false,
+      "messages": {
+        "fr": "Critère de stop immédiat détecté ({flags}). Séance suspendue ; seule une décision humaine autorise la reprise.",
+        "ar": "رُصدت علامة توقف فوري ({flags}). أُوقفت الحصة؛ الاستئناف بقرار بشري فقط."
+      }
+    },
+    "R4": {
+      "label": "Alerte douleur NRS ≥ 4",
+      "priority": 1,
+      "enabled": true,
+      "terminates": true,
+      "human_validation": true,
+      "messages": {
+        "fr": "Douleur NRS {nrs}/10 ≥ {seuil}/10 : exercice suspendu, alerte kinésithérapeute/médecin sous {sla} min.",
+        "ar": "ألم بمقياس {nrs}/10 ≥ {seuil}/10: أُوقفت الحصة، تنبيه أخصائي العلاج الطبيعي/الطبيب خلال {sla} دقائق."
+      }
+    },
+    "R5": {
+      "label": "Interruption — rappel puis appel encadrant",
+      "priority": 2,
+      "enabled": true,
+      "terminates": true,
+      "human_validation": false,
+      "messages": {
+        "fr": "Aucune séance depuis {jours} jour(s) : {canal}.",
+        "ar": "لا توجد حصة منذ {jours} يوم/أيام: {canal}."
+      }
+    },
+    "R3": {
+      "label": "Allègement après RPE élevé répété",
+      "priority": 3,
+      "enabled": true,
+      "terminates": true,
+      "human_validation": true,
+      "messages": {
+        "fr": "RPE {rpe}/10 ≥ {seuil} sur {n} séances consécutives : proposition d'allègement de {pct}% (validation encadrant requise).",
+        "ar": "مجهود مُدرك {rpe}/10 ≥ {seuil} في {n} حصص متتالية: اقتراح تخفيف بـ {pct}% (بموافقة المؤطر)."
+      }
+    },
+    "R1": {
+      "label": "Progression après RPE faible répété sans douleur",
+      "priority": 4,
+      "enabled": true,
+      "terminates": true,
+      "human_validation": true,
+      "messages": {
+        "fr": "RPE {rpe}/10 ≤ {seuil} sur {n} séances sans douleur : proposition d'augmentation de {pct}% de la durée (validation encadrant requise).",
+        "ar": "مجهود مُدرك {rpe}/10 ≤ {seuil} في {n} حصص دون ألم: اقتراح زيادة مدة المشي بـ {pct}% (بموافقة المؤطر)."
+      }
+    },
+    "R2": {
+      "label": "Maintien de la charge",
+      "priority": 5,
+      "enabled": true,
+      "terminates": true,
+      "human_validation": false,
+      "messages": {
+        "fr": "RPE {rpe}/10 entre {min} et {max} : maintien de la charge.",
+        "ar": "مجهود مُدرك {rpe}/10 بين {min} و {max}: الإبقاء على نفس الحمل."
+      }
+    },
+    "R6": {
+      "label": "Aptitude / fin de programme",
+      "priority": 6,
+      "enabled": true,
+      "terminates": true,
+      "human_validation": true,
+      "messages": {
+        "success_fr": "6MWT T0={t0} m → T1={t1} m (objectif {objectif} m) : proposition de validation « Programme terminé » (décision encadrant).",
+        "success_ar": "اختبار المشي T0={t0} م ← T1={t1} م (الهدف {objectif} م): اقتراح اعتماد « انتهى البرنامج » (قرار المؤطر).",
+        "second_fr": "6MWT T0={t0} m → T1={t1} m (objectif {objectif} m) : proposition d'un second cycle (décision encadrant).",
+        "second_ar": "اختبار المشي T0={t0} م ← T1={t1} م (الهدف {objectif} م): اقتراح دورة ثانية (قرار المؤطر).",
+        "missing_fr": "Données T0/T1 ou objectif manquantes : décision de fin de programme impossible.",
+        "missing_ar": "بيانات T0/T1 أو الهدف غير متوفرة: لا يمكن اتخاذ قرار نهاية البرنامج."
+      }
+    },
+    "CONFIRM": {
+      "label": "Confirmation requise (sortie vocale non vérifiée)",
+      "priority": -1,
+      "enabled": true,
+      "terminates": true,
+      "human_validation": true,
+      "messages": {
+        "fr": "Déclaration vocale non confirmée (confiance {confiance}) : confirmation requise avant tout changement de charge.",
+        "ar": "تصريح صوتي غير مؤكد (الثقة {confiance}): يلزم التأكيد قبل أي تغيير في الحمل."
+      }
+    }
+  }
+}

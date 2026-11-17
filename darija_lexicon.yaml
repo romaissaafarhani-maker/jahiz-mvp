@@ -1,0 +1,109 @@
+# Lexique Darija du MVP Jahiz — spécification de l'adaptateur NLP
+# Toutes les phrases d'exemple sont SYNTHÉTIQUES.
+# Ce fichier est la source lisible ; l'API charge ce contenu au démarrage.
+
+meta:
+  locale: "ary-MA"          # Darija marocaine (Arabizi non couvert en MVP)
+  version: "1.0.0"
+  asr_min_confidence: 0.75
+  load_change_min_confidence: 0.65
+  require_explicit_confirmation_for_load_change: true
+  safety_first: true        # S0 et R4 court-circuitent la confirmation
+
+normalization:
+  - {pattern: "راني", replacement: "أنا"}
+  - {pattern: "حسيت", replacement: "أحسست"}
+  - {pattern: "فال", replacement: "في ال"}
+  - {pattern: "بزاف بزاف", replacement: "جدا جدا"}
+  - note: "Ne jamais normaliser تعب en ألم : ce sont deux concepts distincts."
+
+intents:
+  DECLARER_ETAT:
+    examples:
+      - "راني حسيت بتعب كبير اليوم فالرجلين"
+      - "أنا متعب اليوم"
+      - "كاين ألم فركبتي"
+  DEMANDER_AIDE:
+    examples:
+      - "كاين مساعدة، ما قدرتش نمشي"
+      - "حتاج المؤطر"
+  ARRETER_SEANCE:
+    examples:
+      - "أوقف، كاين ألم فالصدر"
+      - "خليني، دوخت"
+
+entities:
+  rpe:
+    scale: "0-10"
+    bands:
+      FAIBLE:
+        value: 2
+        patterns: ["تعب خفيف", "تعب قليل", "ما كاين حتى تعب", "مرتاح"]
+      MODERE:
+        value: 5
+        patterns: ["تعب متوسط", "تعب عادي", "كيهضريني شوية"]
+      ELEVE:
+        value: 7
+        patterns: ["تعب كبير", "صعب", "تعبت بزاف", "كاين تعب قوي"]
+      TRES_ELEVE:
+        value: 9
+        patterns: ["ما قدرتش", "تعبت بزاف بزاف", "وصلت للحد"]
+  nrs:
+    scale: "0-10"
+    patterns: ["ألم", "وجع", "كيوجعني", "حسيت بوجع", "ألم مستمر"]
+    intensity_modifiers:
+      LEGER: 2
+      MOYEN: 4
+      FORT: 7
+      AIGU: 9
+    rule: "Ne pas déduire NRS depuis le seul mot تعب (fatigue)."
+  body_site:
+    LEGS: ["الرجلين", "الساقين", "فالرجلين", "ركبتي"]
+    CHEST: ["الصدر", "فالصدر", "صدري"]
+    HEAD: ["راسي", "الراس"]
+    JOINTS: ["المفاصل", "ركبتي", "كوعي"]
+  temporal:
+    TODAY: ["اليوم", "النهار", "هذا النهار"]
+    THIS_MORNING: ["هذا الصباح", "الصباح"]
+    YESTERDAY: ["أمس", "البارح"]
+
+red_flags:
+  chest_pain:
+    patterns: ["ضغط فالصدر", "ألم فالصدر", "صدري كيوجعني", "حسيت بضغط فالصدر"]
+    action: S0
+    requires_confirmation: false
+  vertigo:
+    patterns: ["دوخة", "راسي كيدور", "غميت", "دخت"]
+    action: S0
+    requires_confirmation: false
+  unusual_dyspnea:
+    patterns: ["ضيق نفس", "ما كنتنفسش مزيان", "نفسي قصير", "التنفس صعيب عليا"]
+    action: S0
+    requires_confirmation: false
+  acute_joint_pain:
+    patterns: ["ألم حاد فمفصل", "ركبتي كيوجعني بزاف", "ألم حاد فالركبة"]
+    action: S0
+    requires_confirmation: false
+
+follow_up_templates:
+  pain_missing:
+    darija: "واش كاين ألم ولا وجع فالرجلين؟"
+    fr: "Y a-t-il une douleur dans les jambes ?"
+    maps_to: nrs
+  red_flags_missing:
+    darija: "واش حسّيتي بضغط فالصدر ولا دوخة؟"
+    fr: "Avez-vous eu une douleur thoracique ou un vertige ?"
+    maps_to: red_flags
+  voice_confirmation:
+    darija: "سجلت: تعب كبير اليوم. واش صحيح؟ أضغط تأكيد"
+    fr: "J'ai compris : forte fatigue aujourd'hui. Est-ce correct ? Appuyez sur Confirmer."
+
+forbidden_output_terms:
+  - "diagnostic"
+  - "عندك"
+  - "vous souffrez"
+  - "مرضك"
+  - "prescription"
+  - "وصف طبي"
+
+output_schema_ref: "examples/darija_output.json"

@@ -1,0 +1,28 @@
+# Dépendances et artefacts de build
+node_modules/
+dist/
+coverage/
+*.local
+
+# Python (ancienne démo)
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# Éditeur / système
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Kit du concours — non publié sur le dépôt
+*.pdf
+*.pptx
+mvp-jahiz-hajj-1448.json

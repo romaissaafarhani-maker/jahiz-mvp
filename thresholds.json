@@ -1,0 +1,96 @@
+{
+  "meta": {
+    "version": "0.1.0-fondations",
+    "statut_global": "TOUS_LES_PARAMETRES_SONT_A_VALIDER_AVANT_USAGE_REEL",
+    "principe": "La plateforme propose et alerte, l'humain décide. Aucun seuil n'est une recommandation médicale."
+  },
+  "regles": {
+    "R1": {
+      "rpe_max": 4,
+      "seances_consecutives": 2,
+      "nrs_max": 3,
+      "augmentation_duree_pourcent": 10,
+      "validation_humaine_obligatoire": true,
+      "status": "A_VALIDER_PAR_LE_MEDECIN_REFERENT"
+    },
+    "R2": {
+      "rpe_min": 5,
+      "rpe_max": 6,
+      "status": "A_VALIDER_PAR_LE_MEDECIN_REFERENT"
+    },
+    "R3": {
+      "rpe_min": 7,
+      "seances_consecutives": 2,
+      "reduction_duree_pourcent": 15,
+      "automatique_car_allgement": true,
+      "status": "A_VALIDER_PAR_LE_MEDECIN_REFERENT"
+    },
+    "R4": {
+      "nrs_min": 4,
+      "suspendre_exercice_concerne": true,
+      "status": "A_VALIDER_PAR_LE_MEDECIN_REFERENT"
+    },
+    "R5": {
+      "jours_rappel": 2,
+      "jours_appel_encadrant": 3,
+      "status": "A_VALIDER_PAR_LE_MEDECIN_REFERENT"
+    },
+    "R6": {
+      "amelioration_6mwt_min_m": 20,
+      "status": "PLACEHOLDER_A_VALIDER_PAR_LE_MEDECIN_REFERENT",
+      "note": "Valeur par défaut purement indicatrice pour la démo ; aucun chiffre clinique n'est affirmé."
+    }
+  },
+  "arret_immediat": {
+    "symptomes": ["chestPain", "dizzinessOrSyncope", "unusualBreathlessness", "severeJointPain"],
+    "regle_fixe_non_contournable": true,
+    "message_ar": "توقفوا واجلسوا. اتصلوا بالمؤطر أو بالإسعاف.",
+    "message_fr": "Arrêtez et asseyez-vous. Contactez votre encadrant ou les secours.",
+    "status": "REGLE_DE_SECURITE_FIXE"
+  },
+  "evaluation": {
+    "tests": {
+      "6MWT": { "unite": "m", "niveaux": { "faible": { "max": 300 }, "moyen": { "min": 301, "max": 400 }, "bon": { "min": 401 } }, "status": "A_VALIDER_PAR_LE_SPECIALISTE" },
+      "STAND": { "unite": "s", "niveaux": { "faible": { "max": 20 }, "moyen": { "min": 21, "max": 40 }, "bon": { "min": 41 } }, "status": "A_VALIDER_PAR_LE_SPECIALISTE" },
+      "FLOOR": { "unite": "niveau", "niveaux": { "faible": { "max": 1 }, "moyen": { "min": 2, "max": 2 }, "bon": { "min": 3 } }, "status": "A_VALIDER_PAR_LE_SPECIALISTE" },
+      "WALK": { "unite": "s", "niveaux": { "faible": { "max": 15 }, "moyen": { "min": 16, "max": 25 }, "bon": { "min": 26 } }, "status": "A_VALIDER_PAR_LE_SPECIALISTE" },
+      "CHAIR": { "unite": "repps/30s", "niveaux": { "faible": { "max": 8 }, "moyen": { "min": 9, "max": 14 }, "bon": { "min": 15 } }, "status": "A_VALIDER_PAR_LE_SPECIALISTE" }
+    }
+  },
+  "programme": {
+    "jours": 14,
+    "jours_seance": 12,
+    "jours_repos": 2,
+    "duree_min_min": 10,
+    "duree_max_min": 25,
+    "objectif_6mwt_par_defaut_m": 360,
+    "exercices_autorises": ["marche_progress", "lever_chaise", "releve_sol_assiste", "equilibre", "station_debout_progressive"],
+    "status": "A_VALIDER_PAR_LE_SPECIALISTE"
+  },
+  "ia": {
+    "niveau1": {
+      "confiance_min": 0.65,
+      "confiance_neutre": 0.6,
+      "confiance_par_symptome": {
+        "chestPain": 0.92,
+        "dizzinessOrSyncope": 0.9,
+        "unusualBreathlessness": 0.88,
+        "severeJointPain": 0.86
+      },
+      "escalade_si_doute_danger": true,
+      "confirmation_utilisateur_obligatoire": true,
+      "status": "A_VALIDER_PAR_LE_SPECIALISTE"
+    },
+    "niveau2": {
+      "poids": { "gravite_symptome": 40, "niveau_douleur": 25, "jours_manques": 20, "tendance_effort": 15 },
+      "status": "A_VALIDER_PAR_LE_MEDECIN_REFERENT"
+    }
+  },
+  "accessibilite": {
+    "taille_texte_px": 20,
+    "taille_bouton_px": 56,
+    "grand_texte_facteur": 1.25,
+    "contraste_vis": "AA minimum, AAA visé pour le texte principal",
+    "status": "CONTRAINTE_PRODUIT"
+  }
+}

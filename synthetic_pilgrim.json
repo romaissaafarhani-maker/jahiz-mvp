@@ -1,0 +1,102 @@
+{
+  "_notice": "JEU DE DONNÉES SYNTHÉTIQUE. Aucune donnée réelle de pèlerin. Préfixe SYNTH- obligatoire.",
+  "generator": { "seed": 1448, "synthetic": true, "version": "1.0.0" },
+  "pilgrim": {
+    "id": "SYNTH-001",
+    "pseudonyme": "الحاج أحمد (SYNTH-001)",
+    "age": 63,
+    "categorie": ["SENIOR"],
+    "dialecte": "DARIJA",
+    "contactPrefere": "WHATSAPP",
+    "estSynthetique": true,
+    "helper": { "id": "SYNTH-H01", "relation": "FILS", "role": "AIDANT" },
+    "encadrantId": "SYNTH-E01",
+    "agencyId": "SYNTH-A01",
+    "consentements": [
+      {
+        "versionFormulaire": "consent-v1.0",
+        "portees": ["SUIVI_SEANCE", "TRAITEMENT_VOCAL", "ALERTE_ENCADRANT", "STATISTIQUES_ANONYMES"],
+        "dateAccord": "2026-11-01T09:12:00+01:00",
+        "dateRetrait": null
+      }
+    ]
+  },
+  "cycle": {
+    "id": "SYNTH-C001",
+    "numeroCycle": 1,
+    "dateDebut": "2026-11-02",
+    "dateFin": "2026-11-22",
+    "dateDepartHajj": "2026-11-24",
+    "objectif6MWT": 400,
+    "statut": "EN_COURS",
+    "semaines": [
+      { "numero": 1, "theme": "بناء الأساس / construction de la base", "seances": 5 },
+      { "numero": 2, "theme": "تدرج المشي / progression de la marche", "seances": 5 },
+      { "numero": 3, "theme": "محاكاة أيام المناسك / simulation", "seances": 4 }
+    ]
+  },
+  "assessments": [
+    {
+      "id": "SYNTH-ASSESS-T0",
+      "type": "T0",
+      "date": "2026-11-02",
+      "realisePar": "SYNTH-E01",
+      "sixMwtMetres": 350,
+      "sitToStand30s": 11,
+      "unilateralStanceSec": 8,
+      "leverDeSolReussi": false,
+      "timedUpAndGoSec": 12,
+      "postureConfortableMin": 20
+    }
+  ],
+  "sessions": [
+    {
+      "id": "SYNTH-SESSION-013",
+      "date": "2026-11-15",
+      "semaine": 2,
+      "type": "MARCHE",
+      "dureePrevueMin": 20,
+      "dureeReelleMin": 20,
+      "statut": "TERMINEE",
+      "rpe": 4,
+      "nrs": 1,
+      "source": "MANUAL",
+      "confiance": 1.0,
+      "confirmee": true,
+      "syncState": "SYNCEE"
+    },
+    {
+      "id": "SYNTH-SESSION-014",
+      "date": "2026-11-16",
+      "semaine": 2,
+      "type": "MARCHE",
+      "dureePrevueMin": 20,
+      "dureeReelleMin": 20,
+      "statut": "TERMINEE",
+      "rpe": 4,
+      "nrs": 1,
+      "source": "MANUAL",
+      "confiance": 1.0,
+      "confirmee": true,
+      "syncState": "SYNCEE"
+    }
+  ],
+  "checkinExemple": {
+    "id": "SYNTH-CHECKIN-017",
+    "date": "2026-11-17",
+    "etat": "FATIGUED",
+    "texteBrut": "راني حسيت بتعب كبير اليوم فالرجلين",
+    "source": "VOICE_DARIJA",
+    "confiance": 0.72,
+    "confirmee": false,
+    "sortieDetaillee": "examples/darija_output.json"
+  },
+  "decisionAttendue": {
+    "ruleId": "R1",
+    "action": "PROPOSER_AUGMENTATION_DUREE",
+    "pourcentage": 10,
+    "dureeProposeeMin": 22,
+    "statutHumain": "EN_ATTENTE",
+    "explicationFr": "RPE 4/10 sur 2 séances sans douleur : proposition d'augmentation de 10% de la durée (validation encadrant requise)."
+  }
+}
